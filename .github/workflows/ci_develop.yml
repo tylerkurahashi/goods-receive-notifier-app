@@ -67,7 +67,7 @@ jobs:
 
       - name: Check mypy
         working-directory: ./notifier_app
-        run: mypy --version &&
+        run: mypy --version && mypy --install-types &&
              mypy ./ --exclude 'tests/' --no-namespace-packages
 
       - name: Host remove
