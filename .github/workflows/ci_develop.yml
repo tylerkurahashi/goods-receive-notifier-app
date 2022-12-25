@@ -76,10 +76,10 @@ jobs:
 
       #-- Production Test --#
       - name: Docker Compose Build
-        run: docker compose -f docker-compose.ci.yml build 
+        run: docker-compose -f docker-compose.ci.yml build 
 
       - name: Docker Compose Run
-        run: docker compose -f docker-compose.ci.yml up -d
+        run: docker-compose -f docker-compose.ci.yml up -d
 
       - name: Wait time for container run 
         run: sleep 30
