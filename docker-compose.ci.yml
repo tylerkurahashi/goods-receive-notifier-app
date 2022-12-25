@@ -8,6 +8,6 @@ services:
     volumes:
       - type: bind
         source: ./notifier_app/logs/
-        target: /workspace/notifier_app/
+        target: /workspace/notifier_app/logs/
     working_dir: /workspace/notifier_app/
     shm_size: '8gb'
