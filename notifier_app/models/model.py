@@ -5,7 +5,7 @@ from logging import config, getLogger
 from typing import Dict
 
 import requests
-from box import Box
+from box import Box # type: ignore
 from bs4 import BeautifulSoup
 
 
