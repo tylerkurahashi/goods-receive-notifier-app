@@ -47,7 +47,7 @@ jobs:
           sudo apt-get install -y zip tree
 
       - name: Visualize Folders
-        run: tree notification_app/
+        run: tree notifier_app/
 
       - name: Install dependencies
         run: |
