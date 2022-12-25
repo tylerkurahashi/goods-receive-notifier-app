@@ -7,7 +7,7 @@ RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/machi
 RUN apt-get update --fix-missing && apt-get install -y \
     ffmpeg libsm6 libxext6 git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6 \
     python3 python3-dev python3-tk python3-pip libzmq3-dev libpng-dev \
-    zip unzip htop sl git openssh-server vim curl \
+    zip unzip htop sl git openssh-server vim curl screen\
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 

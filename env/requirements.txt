@@ -4,3 +4,5 @@ tqdm
 requests
 beautifulsoup4
 python-box
+types-requests
+types-beautifulsoup4
