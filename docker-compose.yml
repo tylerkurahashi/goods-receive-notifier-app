@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  notifier_app:
+    build:
+      context: .
+      dockerfile: env/Dockerfile
+    ports:
+      - "6969:22"
+    volumes:
+      - type: bind
+        source: /home/ubuntu-server/workspace/GitRepository/goods-receive-notifier-app/notifier_app
+        target: /workspace/
+    working_dir: /workspace
+    shm_size: '8gb'
