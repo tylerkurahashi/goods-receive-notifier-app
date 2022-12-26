@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  notifier_app_prd:
+    build:
+      context: .
+      dockerfile: env/Dockerfile_prd
+    volumes:
+      - type: bind
+        source: ./notifier_app/logs/
+        target: /workspace/notifier_app/logs/
+    working_dir: /workspace/notifier_app/
+    shm_size: '8gb'

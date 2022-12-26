@@ -1,0 +1,36 @@
+[tool.black]
+line-length = 120
+target-version = ['py39']
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.mypy_cache
+  | \.github
+  | \.pytest_cache
+  | \__pycache__
+  | \.vscode
+  | logs
+)/
+'''
+
+[tool.isort]
+line_length = 120
+profile = "black"
+lines_after_imports = 2
+
+[project]
+name = "notifier-app"
+authors = [{name = "Tyler Kurahashi", email = "tyler.kurahashi@gmail.com"}]
+classifiers = [
+    "Programming Language :: Python :: 3.9",
+]
+requires-python=">=3.9"
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+]
+
+[tool.pytest.ini_options]
+filterwarnings = ["ignore::DeprecationWarning",]

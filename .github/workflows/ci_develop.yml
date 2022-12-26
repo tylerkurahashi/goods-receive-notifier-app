@@ -1,0 +1,106 @@
+name: Develop Basic CI
+
+on:
+  pull_request:
+    branches:
+      - main
+      - develop
+      - feature/ci
+
+    types: [opened, synchronize]
+    paths:
+      - "**"
+  push:
+    branches:
+    - develop
+    - feature/ci
+    paths:
+      - "**"
+
+  workflow_dispatch:
+
+env:
+  ENV_PYTEST: github_actions 
+  SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL_GITHUBACTIONS }}
+  SLACK_USERNAME: CI-notification-Bot
+  SLACK_CHANNEL: dev_githubactions_notification
+
+jobs:
+  ci:
+    name: basic CI
+    runs-on: ubuntu-latest
+    env:
+      PORT: 6969
+
+    steps:
+      #-- Set up Environment --#
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+
+      - name: Apt-get
+        run: >-
+          sudo apt-get update && 
+          sudo apt-get install -y zip tree
+
+      - name: Visualize Folders
+        run: tree notifier_app/
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r env/requirements_dev.txt
+
+      #-- Code Check --#
+      - name: Check black
+        working-directory: ./notifier_app
+        run: black --version && 
+             black --check .
+
+      - name: Check isort
+        working-directory: ./notifier_app
+        run: isort --version &&
+             isort --check-only .
+
+      - name: Check mypy
+        working-directory: ./notifier_app
+        run: mypy --version &&
+             mypy ./ --exclude 'tests/' --no-namespace-packages
+
+      - name: Host remove
+        run: |
+          sudo rm -rf "/usr/local/share/boost"
+
+      #-- Production Test --#
+      - name: Docker Compose Build
+        run: docker-compose -f docker-compose.ci.yml build 
+
+      - name: Docker Compose Run
+        run: docker-compose -f docker-compose.ci.yml up -d
+
+      - name: Wait time for container run 
+        run: sleep 30
+      
+      #-- Slack Notification --#
+      - name: Slack Notification on Success
+        if: ${{ success() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_TITLE: Test Success 
+          SLACK_COLOR: good
+
+      - name: Slack Notification on Failure
+        if: ${{ failure() }}
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_TITLE: Test Failure
+          SLACK_COLOR: danger
+
+      #-- Debug --#
+      - name: Debug from logging
+        if: ${{ failure() }}
+        run: |
+          docker logs $(docker ps --format "{{.ID}}")
